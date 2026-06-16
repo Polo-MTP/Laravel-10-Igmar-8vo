@@ -28,6 +28,26 @@ class RouteServiceProvider extends ServiceProvider
             return Limit::perMinute(60)->by($request->user()?->id ?: $request->ip());
         });
 
+         RateLimiter::for('register', function (Request $request) {
+            return Limit::perMinute(3)->by($request->ip())->response(function () {
+            return response()->json([
+                    'success' => false,
+                    'message' => 'Demasiados intentos de registro. Por favor, intenta de nuevo en unos minutos.'
+                ], 429);
+            });
+        });
+
+        RateLimiter::for('login', function (Request $request) {
+            return Limit::perMinute(10)->by($request->ip())->response(function () {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Se han detectado demasiados intentos de inicio de sesión desde tu red. Intenta en un minuto.'
+                ], 429);
+            });
+         });
+
+
+
         $this->routes(function () {
             Route::middleware('api')
                 ->prefix('api')
