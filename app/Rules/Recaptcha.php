@@ -10,17 +10,26 @@ class Recaptcha implements ValidationRule
 {
     public function validate(string $attribute, mixed $value, Closure $fail): void
     {
-        //quitar el withoutVerifying() si  dejas de usar localhost, osea si usas un dominio real
-        $response = Http::asForm()->withoutVerifying()->post('https://www.google.com/recaptcha/api/siteverify', [
-            'secret' => env('RECAPTCHA_SECRET_KEY'),
-            'response' => $value, // El código que nos mandó el Frontend
-        ]);
+        // Quitar el withoutVerifying() si dejas de usar localhost (ej. en un dominio real)
+        try {
+            $response = Http::asForm()
+                ->withoutVerifying()
+                ->timeout(5) // Establece un tiempo de espera límite de 5 segundos
+                ->post('https://www.google.com/recaptcha/api/siteverify', [
+                    'secret' => env('RECAPTCHA_SECRET_KEY'),
+                    'response' => $value, // El código que mandó el Frontend
+                ]);
+        } catch (\Exception $e) {
+            // Captura errores de red o caídas de los servidores de Google
+            $fail('No se pudo verificar el reCAPTCHA debido a problemas de conexión con el servicio de verificación.');
+            return;
+        }
 
         // 2. Google nos devuelve un JSON. Verificamos si el campo 'success' es true.
         $body = $response->json();
         
         if (!isset($body['success']) || !$body['success']) {
-            // Si es falso el token expiró o es inválido
+            // Si es falso, el token expiró o es inválido
             $fail('La verificación anti-robots (reCAPTCHA) ha fallado. Intenta de nuevo.');
             return;
         }
