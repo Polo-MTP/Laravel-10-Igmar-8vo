@@ -113,3 +113,132 @@ body {
     to { opacity: 1; transform: translateY(0); }
 }
 .fade-in { animation: fadeIn 0.3s ease forwards; }
+
+/* Password visibility toggle styles */
+.password-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+.password-wrapper input {
+    padding-right: 44px; /* Space for the eye button */
+}
+.toggle-password {
+    position: absolute;
+    right: 12px;
+    background: none;
+    border: none;
+    padding: 4px;
+    cursor: pointer;
+    color: #94a3b8;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: color 0.2s, transform 0.1s;
+}
+.toggle-password:hover {
+    color: #475569;
+}
+.toggle-password:active {
+    transform: scale(0.95);
+}
+.toggle-password svg {
+    width: 20px;
+    height: 20px;
+}
+
+/* Password Rules panel styling */
+.password-rules {
+    margin-top: 12px;
+    padding: 14px;
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    font-size: 13px;
+    display: none; /* Controlled dynamically via JS */
+    animation: slideDown 0.25s ease-out forwards;
+}
+.password-rules.visible {
+    display: block;
+}
+.rules-title {
+    font-weight: 600;
+    color: #475569;
+    margin-bottom: 10px;
+}
+.rules-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+.rule-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: #64748b;
+    font-weight: 500;
+    transition: color 0.25s ease;
+}
+.rule-item svg {
+    width: 16px;
+    height: 16px;
+    flex-shrink: 0;
+    transition: transform 0.2s ease;
+}
+
+/* Met/Unmet icon states mapping */
+.rule-item.met {
+    color: #059669; /* emerald green */
+}
+.rule-item.met svg.icon-met {
+    display: block;
+    color: #059669;
+    transform: scale(1.1);
+}
+.rule-item.met svg.icon-unmet {
+    display: none !important;
+}
+.rule-item:not(.met) svg.icon-met {
+    display: none !important;
+}
+.rule-item:not(.met) svg.icon-unmet {
+    display: block;
+    color: #94a3b8;
+}
+
+/* Strength Progress Bar */
+.strength-container {
+    margin-top: 14px;
+    border-top: 1px solid #f1f5f9;
+    padding-top: 12px;
+}
+.strength-bar {
+    height: 6px;
+    width: 100%;
+    background: #e2e8f0;
+    border-radius: 3px;
+    overflow: hidden;
+}
+.strength-progress {
+    height: 100%;
+    width: 0%;
+    background: #ef4444; /* Start red */
+    border-radius: 3px;
+    transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1), background-color 0.3s ease;
+}
+.strength-text {
+    font-size: 11px;
+    font-weight: 600;
+    color: #64748b;
+    margin-top: 6px;
+    text-align: right;
+    display: block;
+}
+
+@keyframes slideDown {
+    from { opacity: 0; transform: translateY(-8px); }
+    to { opacity: 1; transform: translateY(0); }
+}
