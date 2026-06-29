@@ -17,6 +17,7 @@ return [
     */
 
     'name' => env('APP_NAME', 'Laravel'),
+    'server_number' => env('SERVER_NUMBER', 'desconocido'),
 
     /*
     |--------------------------------------------------------------------------

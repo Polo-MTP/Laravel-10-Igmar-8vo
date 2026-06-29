@@ -12,6 +12,7 @@
 
     <div class="login-container" id="app">
         <div class="logo">Login Seguro</div>
+        <span class="badge">Servidor: {{ config('app.server_number') }}</span>
 
         @if (session('error'))
             <div class="alert alert-error">{{ session('error') }}</div>
