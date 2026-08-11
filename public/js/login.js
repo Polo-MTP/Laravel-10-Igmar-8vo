@@ -54,10 +54,11 @@ loginForm.addEventListener('submit', async (e) => {
         grecaptcha.execute(recaptchaSiteKey, {action: 'login'}).then(async function(token) {
                 const response = await fetch('/api/login', {
                     method: 'POST',
+                    credentials: 'include',
                     headers: { 
                         'Content-Type': 'application/json', 
                         'Accept': 'application/json',
-                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                        'X-XSRF-TOKEN': decodeURIComponent(document.cookie.split('; ').find(row => row.startsWith('XSRF-TOKEN='))?.split('=')[1] || '')
                     },
                     body: JSON.stringify({
                         email: emailInput.value,
@@ -107,10 +108,11 @@ mfaForm.addEventListener('submit', async (e) => {
 
     const response = await fetch('/api/mfa/verify', {
         method: 'POST',
+        credentials: 'include',
         headers: { 
             'Content-Type': 'application/json', 
             'Accept': 'application/json',
-            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+            'X-XSRF-TOKEN': decodeURIComponent(document.cookie.split('; ').find(row => row.startsWith('XSRF-TOKEN='))?.split('=')[1] || '')
         },
         body: JSON.stringify({ mfa_method_id: currentMfaMethodId, code: codeInput.value })
     });
@@ -151,10 +153,11 @@ emailOtpForm.addEventListener('submit', async (e) => {
 
     const response = await fetch('/api/mfa/email/verify', {
         method: 'POST',
+        credentials: 'include',
         headers: { 
             'Content-Type': 'application/json', 
             'Accept': 'application/json',
-            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+            'X-XSRF-TOKEN': decodeURIComponent(document.cookie.split('; ').find(row => row.startsWith('XSRF-TOKEN='))?.split('=')[1] || '')
         },
         body: JSON.stringify({ user_id: currentUserId, code: codeInput.value })
     });

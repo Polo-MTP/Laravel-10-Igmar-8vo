@@ -205,10 +205,11 @@ registerForm.addEventListener('submit', async (e) => {
             try {
                 const response = await fetch('/api/register', {
                     method: 'POST',
+                    credentials: 'include',
                     headers: { 
                         'Content-Type': 'application/json', 
                         'Accept': 'application/json',
-                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                        'X-XSRF-TOKEN': decodeURIComponent(document.cookie.split('; ').find(row => row.startsWith('XSRF-TOKEN='))?.split('=')[1] || '')
                     },
                     body: JSON.stringify(payload)
                 });

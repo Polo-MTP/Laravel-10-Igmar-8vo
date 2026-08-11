@@ -16,10 +16,11 @@ input.addEventListener('input', async (e) => {
         console.log("Llamando a la API /api/mfa/setup/confirm...");
         const response = await fetch('/api/mfa/setup/confirm', {
             method: 'POST',
+            credentials: 'include',
             headers: { 
                 'Content-Type': 'application/json', 
                 'Accept': 'application/json',
-                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                'X-XSRF-TOKEN': decodeURIComponent(document.cookie.split('; ').find(row => row.startsWith('XSRF-TOKEN='))?.split('=')[1] || '')
             },
             body: JSON.stringify({ mfa_method_id: mfaMethodId, code: input.value })
         });

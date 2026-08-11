@@ -24,10 +24,11 @@ document.getElementById('logoutBtn').addEventListener('click', async () => {
     btn.disabled = true;
     await fetch('/logout', {
         method: 'POST',
+        credentials: 'include',
         headers: {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
-            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+            'X-XSRF-TOKEN': decodeURIComponent(document.cookie.split('; ').find(row => row.startsWith('XSRF-TOKEN='))?.split('=')[1] || '')
         }
     });
     window.location.href = '/login';
